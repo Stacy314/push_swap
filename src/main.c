@@ -1,4 +1,4 @@
-#include "push_swap.h"
+#include "../includes/push_swap.h"
 
 // int main(int argc, char **argv)
 // {
@@ -38,57 +38,66 @@
 
 int main(int argc, char **argv)
 {
-    if (argc < 2)
-        return (0);
-    
-    // Initialize stacks
     t_stack a;
     t_stack b;
+    int i;
+    int j;
+    int *numbers;
+    long num;
+    int size;
+
+    if (argc < 2)
+        return (ft_printf("Enter the numbers to sort.\n"), 1);
     a.top = NULL;
     a.size = 0;
     b.top = NULL;
     b.size = 0;
 
-    // Parse and validate input
-    int *numbers = malloc(sizeof(int) * (argc -1));
+    // Парсинг вхідних даних
+    numbers = malloc(sizeof(int) * (argc -1));
     if (!numbers)
-        print_error();
-    for (int i = 1; i < argc; i++)
+        return(1);
+    i = 1;
+    while(i < argc)
     {
-        // Simple atoi with error checking
-        char *endptr;
-        long num = strtol(argv[i], &endptr, 10);
-        if (*endptr != '\0' || num > INT_MAX || num < INT_MIN)
+        num = ft_atoi(argv[i]);
+        if (num > INT_MAX || num < INT_MIN)
         {
             free(numbers);
-            print_error();
+            ft_printf("Error: doesn't fit into an int.\n");
         }
-        // Check for duplicates
-        for (int j = 0; j < i -1; j++)
+        j = 0;
+        while (j < (i - 1))
+        {
             if (numbers[j] == (int)num)
             {
                 free(numbers);
-                print_error();
+                ft_printf("Error: doubles.\n");
             }
+            j++;
+        }
         numbers[i -1] = (int)num;
         push(&a, numbers[i -1]);
+        i++;
     }
 
-    // Since we pushed to stack, the first argument is at the top
-    // Radix sort expects the first element to be at the beginning
-    // So we need to reverse stack a or process accordingly
-    // For simplicity, let's proceed
-
-    if (!is_sorted(&a))
+    // Перевірка, чи стек відсортований
+    if (is_sorted(&a))
     {
-        radix_sort(&a, &b, a.size);
+        free(numbers);
+        return (0);  // Якщо відсортовано, нічого не робимо
     }
 
-    // Free allocated memory
+    // Якщо не відсортовано, запускаємо алгоритм сортування
+    size = a.size;
+    radix_sort(&a, &b, size);
+
+    // Звільнення пам'яті
+    free(numbers);
     while (a.size)
         pop(&a);
     while (b.size)
         pop(&b);
-    free(numbers);
+
     return (0);
 }

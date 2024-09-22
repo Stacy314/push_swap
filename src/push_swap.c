@@ -1,14 +1,10 @@
-#include "push_swap.h"
+#include "../includes/push_swap.h"
 
-// Stack Operations Implementations
 void push(t_stack *stack, int value)
 {
     t_node *new = malloc(sizeof(t_node));
     if (!new)
-    {
-        write(2, "Error\n", 6);
         exit(EXIT_FAILURE);
-    }
     new->value = value;
     new->next = stack->top;
     stack->top = new;
@@ -24,22 +20,23 @@ int pop(t_stack *stack)
     stack->top = temp->next;
     free(temp);
     stack->size--;
-    return (val);
+    return val;
 }
 
 int is_sorted(t_stack *a)
 {
-    if (!a->top)
-        return (1);
+    if (!a->top || a->size < 2)
+        return 1;
     t_node *current = a->top;
     while (current->next)
     {
         if (current->value > current->next->value)
-            return (0);
+            return 0;
         current = current->next;
     }
-    return (1);
+    return 1;
 }
+
 
 // Operation Functions
 void sa(t_stack *a)
@@ -161,54 +158,53 @@ void rrr(t_stack *a, t_stack *b)
     write(1, "rrr\n", 4);
 }
 
-// Error Handling
-void print_error(void)
-{
-    write(2, "Error\n", 6);
-    exit(EXIT_FAILURE);
-}
-
 // Normalize the array
 int *normalize(int *arr, int size)
 {
     int *sorted = malloc(sizeof(int) * size);
     if (!sorted)
     {
-        print_error();
+        ft_printf("Error\n");
     }
-    memcpy(sorted, arr, sizeof(int) * size);
+    ft_memcpy(sorted, arr, sizeof(int) * size); 
     // Simple Bubble Sort for normalization
-    for (int i = 0; i < size -1; i++)
+    int i = 0;
+    while (i < size - 1)
     {
-        for (int j = 0; j < size - i -1; j++)
+        int j = 0;
+        while (j < size - i - 1)
         {
-            if (sorted[j] > sorted[j+1])
+            if (sorted[j] > sorted[j + 1])
             {
                 int temp = sorted[j];
-                sorted[j] = sorted[j+1];
-                sorted[j+1] = temp;
+                sorted[j] = sorted[j + 1];
+                sorted[j + 1] = temp;
             }
+            j++;
         }
+        i++;
     }
     // Assign index
     int *normalized = malloc(sizeof(int) * size);
     if (!normalized)
     {
         free(sorted);
-        print_error();
+        ft_printf("Error\n");
     }
-    for (int i = 0; i < size; i++)
+    int k = 0;
+    while (k < size)
     {
-        int j = 0;
-        while (j < size)
+        int l = 0;
+        while (l < size)
         {
-            if (arr[i] == sorted[j])
+            if (arr[k] == sorted[l])
             {
-                normalized[i] = j;
+                normalized[k] = l;
                 break;
             }
-            j++;
+            l++;
         }
+        k++;
     }
     free(sorted);
     return normalized;
@@ -217,50 +213,61 @@ int *normalize(int *arr, int size)
 // Radix Sort Implementation
 void radix_sort(t_stack *a, t_stack *b, int size)
 {
-    int *normalized = normalize((int[]) {
-        // Extract values from stack a
-        // Since stack is LIFO, we need to reverse the order
-        // For simplicity, let's assume we have the original array
-    }, size);
-    // To implement radix sort properly, you'd need access to the original array
-    // Here, we'll assume that 'a' has been normalized already
-    // Implementing radix sort with bit manipulation
+    // Extract stack a into an array to have normalized indices
+    int *arr = malloc(sizeof(int) * size);
+    if (!arr)
+        ft_printf("Error\n");
+
+    t_node *current = a->top;
+    int idx = 0;
+    while (current)
+    {
+        arr[idx++] = current->value;
+        current = current->next;
+    }
+
+    // Normalize
+    int *normalized = normalize(arr, size);
+    free(arr);
+
+    // Replace stack a's values with normalized indices
+    current = a->top;
+    idx = 0;
+    while (current)
+    {
+        current->value = normalized[idx++];
+        current = current->next;
+    }
 
     // Find the maximum number to know number of bits
     int max = 0;
-    t_node *current = a->top;
-    while (current)
+    idx = 0;
+    while (idx < size)
     {
-        if (current->value > max)
-            max = current->value;
-        current = current->next;
+        if (normalized[idx] > max)
+            max = normalized[idx];
+        idx++;
     }
 
     int max_bits = 0;
     while ((max >> max_bits) != 0)
         max_bits++;
 
-    for (int i = 0; i < max_bits; i++)
+    int bit = 0;
+    while (bit < max_bits)
     {
-        int j = 0;
-        int size_a = a->size;
-        while (j < size_a)
+        int i = 0;
+        while (i < size)
         {
-            int num = pop(a);
-            if (((num >> i) & 1) == 1)
-            {
-                push(a, num);
+            if (((a->top->value >> bit) & 1) == 1)
                 ra(a);
-            }
             else
-            {
-                push(b, num);
                 pb(a, b);
-            }
-            j++;
+            i++;
         }
         while (b->size > 0)
             pa(a, b);
+        bit++;
     }
-    free(normalize); // Placeholder, adjust accordingly
+    free(normalized);
 }

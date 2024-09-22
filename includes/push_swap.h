@@ -1,7 +1,7 @@
 #ifndef PUSH_SWAP_H
 #define PUSH_SWAP_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 # include <unistd.h>
 //# include <stddef.h>
@@ -37,7 +37,7 @@ void    rr(t_stack *a, t_stack *b);
 void    rra(t_stack *a);
 void    rrb(t_stack *b);
 void    rrr(t_stack *a, t_stack *b);
-void    print_error(void);
+//void    print_error(void);
 int     *normalize(int *arr, int size);
 void    radix_sort(t_stack *a, t_stack *b, int size);
 

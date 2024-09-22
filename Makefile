@@ -1,20 +1,35 @@
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-NAME = push_swap
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR)
-LIBFT_PATH = libft
-LIBFT_ARCHIVE = $(LIBFT_PATH)/libft.a
-AR = ar
-ARFLAGS = rcs
-RM = rm -f
+# **************************************************************************** #
+#                                   VARIABLES                                   #
+# **************************************************************************** #
 
-LIBFT_DIR = libft
-SRC_DIR = src
-OBJ_DIR = obj
-INC_DIR = includes
+NAME        := push_swap
+CC          := cc
+CFLAGS      := -Wall -Wextra -Werror
+AR          := ar
+ARFLAGS     := rcs
+RM          := rm -f
 
+# Directories
+LIBFT_DIR   := libft
+SRC_DIR     := src
+OBJ_DIR     := obj
+INC_DIR     := includes
+
+# Libft
+LIBFT       := $(LIBFT_DIR)/libft.a
+LIBFT_HEADERS := $(LIBFT_DIR)/libft.h
+
+# Source files
+SRCS        := $(wildcard $(SRC_DIR)/*.c)
+# Object files
+OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+
+# Headers
+INCLUDES    := -I$(INC_DIR) -I$(LIBFT_DIR)
+
+# **************************************************************************** #
+#                                  RULES / TARGETS                              #
+# **************************************************************************** #
 
 all: $(NAME)
 
