@@ -1,273 +1,157 @@
 #include "../includes/push_swap.h"
 
-void push(t_stack *stack, int value)
+void    push(t_stack *stack, int value)
 {
-    t_node *new = malloc(sizeof(t_node));
+    t_node  *new;
+
+    new = malloc(sizeof(t_node));
     if (!new)
-        exit(EXIT_FAILURE);
+        exit_with_error("malloc failed");
     new->value = value;
     new->next = stack->top;
     stack->top = new;
     stack->size++;
 }
 
-int pop(t_stack *stack)
+int     pop(t_stack *stack)
 {
+    t_node  *temp;
+    int     value;
+
     if (!stack->top)
         return (0);
-    t_node *temp = stack->top;
-    int val = temp->value;
+    temp = stack->top;
+    value = temp->value;
     stack->top = temp->next;
     free(temp);
     stack->size--;
-    return val;
+    return (value);
 }
 
 int is_sorted(t_stack *a)
 {
+    t_node *current;
+
     if (!a->top || a->size < 2)
-        return 1;
-    t_node *current = a->top;
+        exit_with_error("stack is too small to sort");
+    current = a->top;
     while (current->next)
     {
         if (current->value > current->next->value)
-            return 0;
-        current = current->next;
-    }
-    return 1;
-}
-
-
-// Operation Functions
-void sa(t_stack *a)
-{
-    if (a->size < 2)
-        return;
-    t_node *first = a->top;
-    t_node *second = first->next;
-    first->next = second->next;
-    second->next = first;
-    a->top = second;
-    write(1, "sa\n", 3);
-}
-
-void sb(t_stack *b)
-{
-    if (b->size < 2)
-        return;
-    t_node *first = b->top;
-    t_node *second = first->next;
-    first->next = second->next;
-    second->next = first;
-    b->top = second;
-    write(1, "sb\n", 3);
-}
-
-void ss(t_stack *a, t_stack *b)
-{
-    sa(a);
-    sb(b);
-    write(1, "ss\n", 3);
-}
-
-void pa(t_stack *a, t_stack *b)
-{
-    if (b->size == 0)
-        return;
-    int val = pop(b);
-    push(a, val);
-    write(1, "pa\n", 3);
-}
-
-void pb(t_stack *a, t_stack *b)
-{
-    if (a->size == 0)
-        return;
-    int val = pop(a);
-    push(b, val);
-    write(1, "pb\n", 3);
-}
-
-void ra(t_stack *a)
-{
-    if (a->size < 2)
-        return;
-    t_node *first = a->top;
-    a->top = first->next;
-    first->next = NULL;
-    t_node *current = a->top;
-    while (current->next)
-        current = current->next;
-    current->next = first;
-    write(1, "ra\n", 3);
-}
-
-void rb(t_stack *b)
-{
-    if (b->size < 2)
-        return;
-    t_node *first = b->top;
-    b->top = first->next;
-    first->next = NULL;
-    t_node *current = b->top;
-    while (current->next)
-        current = current->next;
-    current->next = first;
-    write(1, "rb\n", 3);
-}
-
-void rr(t_stack *a, t_stack *b)
-{
-    ra(a);
-    rb(b);
-    write(1, "rr\n", 3);
-}
-
-void rra(t_stack *a)
-{
-    if (a->size < 2)
-        return;
-    t_node *current = a->top;
-    while (current->next->next)
-        current = current->next;
-    t_node *last = current->next;
-    current->next = NULL;
-    last->next = a->top;
-    a->top = last;
-    write(1, "rra\n", 4);
-}
-
-void rrb(t_stack *b)
-{
-    if (b->size < 2)
-        return;
-    t_node *current = b->top;
-    while (current->next->next)
-        current = current->next;
-    t_node *last = current->next;
-    current->next = NULL;
-    last->next = b->top;
-    b->top = last;
-    write(1, "rrb\n", 4);
-}
-
-void rrr(t_stack *a, t_stack *b)
-{
-    rra(a);
-    rrb(b);
-    write(1, "rrr\n", 4);
-}
-
-// Normalize the array
-int *normalize(int *arr, int size)
-{
-    int *sorted = malloc(sizeof(int) * size);
-    if (!sorted)
-    {
-        ft_printf("Error\n");
-    }
-    ft_memcpy(sorted, arr, sizeof(int) * size); 
-    // Simple Bubble Sort for normalization
-    int i = 0;
-    while (i < size - 1)
-    {
-        int j = 0;
-        while (j < size - i - 1)
         {
-            if (sorted[j] > sorted[j + 1])
-            {
-                int temp = sorted[j];
-                sorted[j] = sorted[j + 1];
-                sorted[j + 1] = temp;
-            }
-            j++;
+            //ft_printf("Stack is not sorted\n");
+            return (0);
         }
-        i++;
+        current = current->next;
     }
-    // Assign index
-    int *normalized = malloc(sizeof(int) * size);
-    if (!normalized)
+    //ft_printf("Stack is sorted\n");
+    return (1);
+}
+int is_array_sorted(int *ranks, int total_numbers)
+{
+    for (int i = 0; i < total_numbers - 1; i++)
     {
-        free(sorted);
-        ft_printf("Error\n");
+        if (ranks[i] > ranks[i + 1])
+            return 0;  // Якщо хоч одне число більше наступного, масив не відсортований
     }
-    int k = 0;
-    while (k < size)
+    return 1;  // Масив відсортований
+}
+
+void push_numbers_to_stack(t_stack *a, int *ranks, int total_numbers)
+{
+    // Перевіряємо, чи масив чисел відсортований
+    if (is_array_sorted(ranks, total_numbers))
     {
-        int l = 0;
-        while (l < size)
+        // Якщо відсортований, додаємо числа у стек у зворотному порядку
+        for (int i = total_numbers - 1; i >= 0; i--)
         {
-            if (arr[k] == sorted[l])
+            push(a, ranks[i]);  // Додаємо числа у стек
+            //printf("Pushed to stack: %d (sorted order)\n", ranks[i]);  // Виводимо результат
+        }
+    }
+    else
+    {
+        // Якщо не відсортований, додаємо числа у порядку, як вони передані
+        for (int i = total_numbers - 1; i >= 0; i--)
+        {
+            push(a, ranks[i]);  // Додаємо числа у стек
+            //printf("Pushed to stack: %d\n", ranks[i]);  // Виводимо результат
+        }
+    }
+}
+
+
+void    free_split_args(char **split_args)
+{
+    int j;
+
+    j = 0;
+    while (split_args[j])
+    {
+        free(split_args[j]);
+        j++;
+    }
+    free(split_args);
+}
+
+void    free_stack(t_stack *stack)
+{
+    while (stack->size)
+        pop(stack);
+}
+void bubble_sort(int *arr, int size)
+{
+    int temp;
+    int swapped;
+
+    // Зовнішній цикл повторюється для всіх елементів
+    for (int i = 0; i < size - 1; i++)
+    {
+        swapped = 0;  // Позначаємо, чи відбулися зміни під час цього проходу
+        // Внутрішній цикл порівнює елементи і змінює їх місцями, якщо потрібно
+        for (int j = 0; j < size - i - 1; j++)
+        {
+            if (arr[j] > arr[j + 1])
             {
-                normalized[k] = l;
+                // Міняємо місцями arr[j] і arr[j+1]
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+                swapped = 1;  // Позначаємо, що відбулася зміна
+            }
+        }
+        // Якщо на жодному етапі зміни не відбулися, масив уже відсортований
+        if (swapped == 0)
+            break;
+    }
+}
+
+int *assign_ranks(int *numbers, int total_numbers)
+{
+    int *sorted = malloc(sizeof(int) * total_numbers);
+    int *ranks = malloc(sizeof(int) * total_numbers);
+
+    if (!sorted || !ranks)
+        exit_with_error("malloc failed");
+    // Копіюємо оригінальний масив у sorted
+    for (int i = 0; i < total_numbers; i++)
+        sorted[i] = numbers[i];
+    // Сортуємо копію масиву
+    bubble_sort(sorted, total_numbers);  // Ви можете використовувати будь-який сортувальний алгоритм
+    // Присвоюємо ранги на основі посортованого масиву
+    for (int i = 0; i < total_numbers; i++)
+    {
+        for (int j = 0; j < total_numbers; j++)
+        {
+            if (numbers[i] == sorted[j])
+            {
+                ranks[i] = j;  // Присвоюємо ранг
+                // Виводимо число і його ранг
+                //printf("Number %d is assigned rank %d\n", numbers[i], ranks[i]);
                 break;
             }
-            l++;
         }
-        k++;
     }
-    free(sorted);
-    return normalized;
-}
-
-// Radix Sort Implementation
-void radix_sort(t_stack *a, t_stack *b, int size)
-{
-    // Extract stack a into an array to have normalized indices
-    int *arr = malloc(sizeof(int) * size);
-    if (!arr)
-        ft_printf("Error\n");
-
-    t_node *current = a->top;
-    int idx = 0;
-    while (current)
-    {
-        arr[idx++] = current->value;
-        current = current->next;
-    }
-
-    // Normalize
-    int *normalized = normalize(arr, size);
-    free(arr);
-
-    // Replace stack a's values with normalized indices
-    current = a->top;
-    idx = 0;
-    while (current)
-    {
-        current->value = normalized[idx++];
-        current = current->next;
-    }
-
-    // Find the maximum number to know number of bits
-    int max = 0;
-    idx = 0;
-    while (idx < size)
-    {
-        if (normalized[idx] > max)
-            max = normalized[idx];
-        idx++;
-    }
-
-    int max_bits = 0;
-    while ((max >> max_bits) != 0)
-        max_bits++;
-
-    int bit = 0;
-    while (bit < max_bits)
-    {
-        int i = 0;
-        while (i < size)
-        {
-            if (((a->top->value >> bit) & 1) == 1)
-                ra(a);
-            else
-                pb(a, b);
-            i++;
-        }
-        while (b->size > 0)
-            pa(a, b);
-        bit++;
-    }
-    free(normalized);
+    free(sorted);  // Звільняємо пам'ять, виділену для копії масиву
+    return (ranks);
 }
