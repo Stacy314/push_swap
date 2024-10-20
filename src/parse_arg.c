@@ -6,7 +6,7 @@
 /*   By: apechkov <apechkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:20:29 by apechkov          #+#    #+#             */
-/*   Updated: 2024/10/20 17:57:41 by apechkov         ###   ########.fr       */
+/*   Updated: 2024/10/20 18:00:38 by apechkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int count_total_numbers(int argc, char **argv)
             total_numbers++;
             j++;
         }
-        free_split_args(split_args);
+        free_split_args(split_args);  // Звільняємо пам'ять
         i++;
     }
     return (total_numbers);
@@ -78,10 +78,10 @@ void fill_numbers(int argc, char **argv, int *numbers)
     long num;
 	
 	index = 0;
-    i = 1;
-    if (argc > 2)
-        return ;
     // Проходимо через всі аргументи
+	i = 1;
+    // if (argc > 2)
+    //     return ;
     while (i < argc)
     {
         split_args = ft_split(argv[i], ' ');
