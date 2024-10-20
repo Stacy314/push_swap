@@ -14,7 +14,7 @@ ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
 ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c
 BOBJ = $(BSRC:.c=.o)
 CC = cc
-CFlags = -Wall -Wextra -Werror
+CFlags = -Wall -Wextra -Werror -g
 AR = ar rcs
 RM = rm -f
 

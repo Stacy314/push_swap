@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_arg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anastasiia <anastasiia@student.42.fr>      +#+  +:+       +#+        */
+/*   By: apechkov <apechkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:20:29 by apechkov          #+#    #+#             */
-/*   Updated: 2024/10/17 22:52:22 by anastasiia       ###   ########.fr       */
+/*   Updated: 2024/10/20 17:57:41 by apechkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ int count_total_numbers(int argc, char **argv)
             total_numbers++;
             j++;
         }
-        free_split_args(split_args);  // Звільняємо пам'ять
+        free_split_args(split_args);
         i++;
     }
-    return (total_numbers);  // Повертаємо кількість чисел
+    return (total_numbers);
 }
 
 long validate_number(char *str, int *numbers, int index)
@@ -78,8 +78,10 @@ void fill_numbers(int argc, char **argv, int *numbers)
     long num;
 	
 	index = 0;
+    i = 1;
+    if (argc > 2)
+        return ;
     // Проходимо через всі аргументи
-	i = 1;
     while (i < argc)
     {
         split_args = ft_split(argv[i], ' ');
@@ -88,12 +90,11 @@ void fill_numbers(int argc, char **argv, int *numbers)
         j = 0;
         while (split_args[j])
         {
-            // Використовуємо нову функцію для перевірки і перетворення
             num = validate_number(split_args[j], numbers, index);
-            numbers[index++] = (int)num;  // Додаємо число у масив
+            numbers[index++] = (int)num;
             j++;
         }
-        free_split_args(split_args);  // Звільняємо пам'ять після split
+        free_split_args(split_args);
         i++;
     }
 }

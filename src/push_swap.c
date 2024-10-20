@@ -32,8 +32,12 @@ int is_sorted(t_stack *a)
 {
     t_node *current;
 
-    if (!a->top || a->size < 2)
-        exit_with_error("stack is too small to sort");
+    // if (!a->top || a->size < 2)
+    // {
+    //     //free_stack(current);
+    //     exit_with_error("stack is too small to sort");
+    // }
+
     current = a->top;
     while (current->next)
     {
@@ -96,8 +100,20 @@ void    free_split_args(char **split_args)
 
 void    free_stack(t_stack *stack)
 {
-    while (stack->size)
-        pop(stack);
+    // while (stack->size)
+    //     pop(stack);
+    t_node *current;
+    t_node *next;
+
+    current = stack->top;
+    while (current)
+    {
+        next = current->next;
+        free(current);  // Звільняємо кожен елемент стека
+        current = next;
+    }
+    stack->top = NULL;
+    stack->size = 0;
 }
 void bubble_sort(int *arr, int size)
 {

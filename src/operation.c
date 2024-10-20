@@ -1,7 +1,5 @@
 #include "../includes/push_swap.h"
 
-//int operation_count = 0;  // Оголошення глобальної змінної
-
 void    sa(t_stack *a)
 {
     t_node  *first;
@@ -14,7 +12,6 @@ void    sa(t_stack *a)
     first->next = second->next;
     second->next = first;
     a->top = second;
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "sa\n", 3);
 }
 
@@ -30,7 +27,6 @@ void    sb(t_stack *b)
     first->next = second->next;
     second->next = first;
     b->top = second;
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "sb\n", 3);
 }
 
@@ -38,7 +34,6 @@ void    ss(t_stack *a, t_stack *b)
 {
     sa(a);
     sb(b);
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "ss\n", 3);
 }
 
@@ -50,7 +45,6 @@ void    pa(t_stack *a, t_stack *b)
         return ;
     val = pop(b);
     push(a, val);
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "pa\n", 3);
 }
 
@@ -62,7 +56,6 @@ void    pb(t_stack *a, t_stack *b)
         return ;
     val = pop(a);
     push(b, val);
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "pb\n", 3);
 }
 
@@ -80,7 +73,6 @@ void    ra(t_stack *a)
     while (current->next)
         current = current->next;
     current->next = first;
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "ra\n", 3);
 }
 
@@ -98,7 +90,6 @@ void    rb(t_stack *b)
     while (current->next)
         current = current->next;
     current->next = first;
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "rb\n", 3);
 }
 
@@ -106,7 +97,6 @@ void    rr(t_stack *a, t_stack *b)
 {
     ra(a);
     rb(b);
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "rr\n", 3);
 }
 
@@ -124,7 +114,6 @@ void    rra(t_stack *a)
     current->next = NULL;
     last->next = a->top;
     a->top = last;
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "rra\n", 4);
 }
 
@@ -142,7 +131,6 @@ void    rrb(t_stack *b)
     current->next = NULL;
     last->next = b->top;
     b->top = last;
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "rrb\n", 4);
 }
 
@@ -150,6 +138,5 @@ void    rrr(t_stack *a, t_stack *b)
 {
     rra(a);
     rrb(b);
-    //operation_count++;  // Збільшуємо кількість операцій
     write(1, "rrr\n", 4);
 }
