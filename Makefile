@@ -1,42 +1,37 @@
-NAME        := push_swap
-CC          := cc
-CFLAGS      := -Wall -Wextra -Werror -g
-AR          := ar
-ARFLAGS     := rcs
-RM          := rm -f
+NAME        = push_swap
+CC          = cc
+CFLAGS      = -Wall -Wextra -Werror
+RM          = rm -f
+SRC_DIR     = src
+OBJ_DIR     = obj
 
-LIBFT_DIR   := libft
-SRC_DIR     := src
-OBJ_DIR     := obj
-INC_DIR     := includes
+SRCS        = $(SRC_DIR)/main.c $(SRC_DIR)/parse_arg.c $(SRC_DIR)/push_swap.c \
+              $(SRC_DIR)/radix.c $(SRC_DIR)/utils0.c $(SRC_DIR)/utils1.c \
+			  $(SRC_DIR)/o_push_pop.c $(SRC_DIR)/o_rotate.c $(SRC_DIR)/o_rrotate.c \
+			  $(SRC_DIR)/o_swap.c
 
-LIBFT       := $(LIBFT_DIR)/libft.a
-LIBFT_HEADERS := $(LIBFT_DIR)/libft.h
-
-SRCS        := $(wildcard $(SRC_DIR)/*.c)
-OBJS        := $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-
-INCLUDES    := -I$(INC_DIR) -I$(LIBFT_DIR)
+OBJS        = $(OBJ_DIR)/main.o $(OBJ_DIR)/parse_arg.o $(OBJ_DIR)/push_swap.o \
+              $(OBJ_DIR)/radix.o $(OBJ_DIR)/utils0.o $(OBJ_DIR)/utils1.o \
+			  $(OBJ_DIR)/o_push_pop.o $(OBJ_DIR)/o_rotate.o $(OBJ_DIR)/o_rrotate.o \
+			  $(OBJ_DIR)/o_swap.o
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/*.h $(LIBFT_HEADERS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBFT):
-	make -C $(LIBFT_DIR)
+$(NAME): $(OBJS)
+	$(MAKE) -C ./libft
+	$(CC) $(CFLAGS) -o $@ $(OBJS) ./libft/libft.a
 
 clean:
+	$(MAKE) -C ./libft clean
 	$(RM) -r $(OBJ_DIR)
-	make -C $(LIBFT_DIR) clean
 
 fclean: clean
+	$(MAKE) -C ./libft fclean
 	$(RM) $(NAME)
-	make -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

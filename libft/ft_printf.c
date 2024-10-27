@@ -6,7 +6,7 @@
 /*   By: apechkov <apechkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:40:46 by apechkov          #+#    #+#             */
-/*   Updated: 2024/10/20 14:03:44 by apechkov         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:04:01 by apechkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int	ft_printf(const char *format, ...)
 {
 	va_list		ap;
 	int			i;
-	int			tmp;
 
 	i = 0;
 	va_start(ap, format);
@@ -106,10 +105,7 @@ int	ft_printf(const char *format, ...)
 		}
 		else
 		{
-			if (!(tmp = write(1, format, 1)))
-				return (-1);
-			else
-				i += tmp;
+			i += write(1, format, 1);
 		}
 		++format;
 	}

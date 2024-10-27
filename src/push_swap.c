@@ -1,173 +1,107 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apechkov <apechkov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/02 16:20:29 by apechkov          #+#    #+#             */
+/*   Updated: 2024/10/22 22:25:12 by apechkov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
-void    push(t_stack *stack, int value)
+void	push_numbers_to_stack(t_stack *a, int *ranks, int total_numbers)
 {
-    t_node  *new;
+	int	i;
 
-    new = malloc(sizeof(t_node));
-    if (!new)
-        exit_with_error("malloc failed");
-    new->value = value;
-    new->next = stack->top;
-    stack->top = new;
-    stack->size++;
+	i = total_numbers - 1;
+	while (i >= 0)
+	{
+		push(a, ranks[i]);
+		i--;
+	}
 }
 
-int     pop(t_stack *stack)
+void	bubble_sort(int *arr, int size)
 {
-    t_node  *temp;
-    int     value;
+	int	temp;
+	int	swapped;
+	int	i;
+	int	j;
 
-    if (!stack->top)
-        return (0);
-    temp = stack->top;
-    value = temp->value;
-    stack->top = temp->next;
-    free(temp);
-    stack->size--;
-    return (value);
+	i = 0;
+	while (i < size - 1)
+	{
+		swapped = 0;
+		j = 0;
+		while (j < size - i - 1)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+				swapped = 1;
+			}
+			j++;
+		}
+		if (swapped == 0)
+			break ;
+		i++;
+	}
 }
 
-int is_sorted(t_stack *a)
+int	*copy_and_sort(int *numbers, int total_numbers)
 {
-    t_node *current;
+	int	*sorted;
+	int	i;
 
-    // if (!a->top || a->size < 2)
-    // {
-    //     //free_stack(current);
-    //     exit_with_error("stack is too small to sort");
-    // }
-
-    current = a->top;
-    while (current->next)
-    {
-        if (current->value > current->next->value)
-        {
-            //ft_printf("Stack is not sorted\n");
-            return (0);
-        }
-        current = current->next;
-    }
-    //ft_printf("Stack is sorted\n");
-    return (1);
-}
-int is_array_sorted(int *ranks, int total_numbers)
-{
-    for (int i = 0; i < total_numbers - 1; i++)
-    {
-        if (ranks[i] > ranks[i + 1])
-            return 0;  // Якщо хоч одне число більше наступного, масив не відсортований
-    }
-    return 1;  // Масив відсортований
+	sorted = malloc(sizeof(int) * total_numbers);
+	if (!sorted)
+		exit(1);
+	i = 0;
+	while (i < total_numbers)
+	{
+		sorted[i] = numbers[i];
+		i++;
+	}
+	bubble_sort(sorted, total_numbers);
+	return (sorted);
 }
 
-void push_numbers_to_stack(t_stack *a, int *ranks, int total_numbers)
+int	ft_find_rank(int *sorted, int num, int total_numbers)
 {
-    // Перевіряємо, чи масив чисел відсортований
-    if (is_array_sorted(ranks, total_numbers))
-    {
-        // Якщо відсортований, додаємо числа у стек у зворотному порядку
-        for (int i = total_numbers - 1; i >= 0; i--)
-        {
-            push(a, ranks[i]);  // Додаємо числа у стек
-            //printf("Pushed to stack: %d (sorted order)\n", ranks[i]);  // Виводимо результат
-        }
-    }
-    else
-    {
-        // Якщо не відсортований, додаємо числа у порядку, як вони передані
-        for (int i = total_numbers - 1; i >= 0; i--)
-        {
-            push(a, ranks[i]);  // Додаємо числа у стек
-            //printf("Pushed to stack: %d\n", ranks[i]);  // Виводимо результат
-        }
-    }
+	int	j;
+
+	j = 0;
+	while (j < total_numbers)
+	{
+		if (num == sorted[j])
+			return (j);
+		j++;
+	}
+	return (0);
 }
 
-
-void    free_split_args(char **split_args)
+int	*assign_ranks(int *numbers, int total_numbers)
 {
-    int j;
+	int	*sorted;
+	int	*ranks;
+	int	i;
 
-    j = 0;
-    while (split_args[j])
-    {
-        free(split_args[j]);
-        j++;
-    }
-    free(split_args);
-}
-
-void    free_stack(t_stack *stack)
-{
-    // while (stack->size)
-    //     pop(stack);
-    t_node *current;
-    t_node *next;
-
-    current = stack->top;
-    while (current)
-    {
-        next = current->next;
-        free(current);  // Звільняємо кожен елемент стека
-        current = next;
-    }
-    stack->top = NULL;
-    stack->size = 0;
-}
-void bubble_sort(int *arr, int size)
-{
-    int temp;
-    int swapped;
-
-    // Зовнішній цикл повторюється для всіх елементів
-    for (int i = 0; i < size - 1; i++)
-    {
-        swapped = 0;  // Позначаємо, чи відбулися зміни під час цього проходу
-        // Внутрішній цикл порівнює елементи і змінює їх місцями, якщо потрібно
-        for (int j = 0; j < size - i - 1; j++)
-        {
-            if (arr[j] > arr[j + 1])
-            {
-                // Міняємо місцями arr[j] і arr[j+1]
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-                swapped = 1;  // Позначаємо, що відбулася зміна
-            }
-        }
-        // Якщо на жодному етапі зміни не відбулися, масив уже відсортований
-        if (swapped == 0)
-            break;
-    }
-}
-
-int *assign_ranks(int *numbers, int total_numbers)
-{
-    int *sorted = malloc(sizeof(int) * total_numbers);
-    int *ranks = malloc(sizeof(int) * total_numbers);
-
-    if (!sorted || !ranks)
-        exit_with_error("malloc failed");
-    // Копіюємо оригінальний масив у sorted
-    for (int i = 0; i < total_numbers; i++)
-        sorted[i] = numbers[i];
-    // Сортуємо копію масиву
-    bubble_sort(sorted, total_numbers);  // Ви можете використовувати будь-який сортувальний алгоритм
-    // Присвоюємо ранги на основі посортованого масиву
-    for (int i = 0; i < total_numbers; i++)
-    {
-        for (int j = 0; j < total_numbers; j++)
-        {
-            if (numbers[i] == sorted[j])
-            {
-                ranks[i] = j;  // Присвоюємо ранг
-                // Виводимо число і його ранг
-                //printf("Number %d is assigned rank %d\n", numbers[i], ranks[i]);
-                break;
-            }
-        }
-    }
-    free(sorted);  // Звільняємо пам'ять, виділену для копії масиву
-    return (ranks);
+	sorted = copy_and_sort(numbers, total_numbers);
+	if (!sorted)
+		return (NULL);
+	ranks = malloc(sizeof(int) * total_numbers);
+	if (!ranks)
+		return (free(sorted), NULL);
+	i = 0;
+	while (i < total_numbers)
+	{
+		ranks[i] = ft_find_rank(sorted, numbers[i], total_numbers);
+		i++;
+	}
+	return (free(sorted), ranks);
 }

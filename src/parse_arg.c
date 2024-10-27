@@ -6,110 +6,124 @@
 /*   By: apechkov <apechkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:20:29 by apechkov          #+#    #+#             */
-/*   Updated: 2024/10/20 18:00:38 by apechkov         ###   ########.fr       */
+/*   Updated: 2024/10/22 22:25:08 by apechkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
+#include <stdint.h>
 
-
-void	check_duplicate(int *numbers, int size, long num)
+int	is_sorted(t_stack *a)
 {
-	int	i;
+	t_node	*current;
 
-	i = 0;
-	while (i < size)
+	current = a->top;
+	while (current->next)
 	{
-		if (numbers[i] == (int)num)
+		if (current->value > current->next->value)
+			return (0);
+		current = current->next;
+	}
+	return (1);
+}
+
+void	fill_from_multiple_args(int argc, char **argv, int *numbers, int *index)
+{
+	int		i;
+	int		num;
+	char	*str;
+	size_t	len;
+
+	i = 1;
+	while (i < argc)
+	{
+		if (argv[i][0] == '\0')
+			return (free(numbers), exit_with_error());
+		num = ft_atoi(argv[i]);
+		str = ft_itoa(num);
+		len = ft_strlen(argv[i]);
+		if (ft_strncmp(str, argv[i], len) != 0)
 		{
+			free(str);
 			free(numbers);
-			exit_with_error("duplicate number found");
+			exit_with_error();
 		}
+		free(str);
+		if (!check_duplicate(numbers, *index, num))
+			exit_with_error();
+		numbers[(*index)++] = num;
 		i++;
 	}
 }
 
-int count_total_numbers(int argc, char **argv)
+void	fill_from_single_arg(char *arg, int *numbers, int *index)
 {
-    int total_numbers;
-    char **split_args;
-    int i;
-	int j;
+	char	**split_args;
+	int		j;
+	int		num;
+	char	*str;
 
-	total_numbers = 0;
-    // Підраховуємо загальну кількість чисел після split
-	i = 1;
-    while (i < argc)
-    {
-        split_args = ft_split(argv[i], ' ');
-        if (!split_args)
-            exit_with_error("split failed");
-        j = 0;
-        while (split_args[j])
-        {
-            total_numbers++;
-            j++;
-        }
-        free_split_args(split_args);  // Звільняємо пам'ять
-        i++;
-    }
-    return (total_numbers);
+	split_args = ft_split(arg, ' ');
+	if (!split_args)
+		return (free(numbers), exit_with_error());
+	j = 0;
+	while (split_args[j])
+	{
+		num = ft_atoi(split_args[j]);
+		str = ft_itoa(num);
+		if (ft_strncmp(str, split_args[j], ft_strlen(split_args[j])))
+			return (free_split_args(split_args), free(numbers),
+				free(str), exit_with_error());
+		free(str);
+		if (!check_duplicate(numbers, *index, num))
+			return (free_split_args(split_args), exit_with_error());
+		numbers[(*index)++] = num;
+		j++;
+	}
+	free_split_args(split_args);
 }
 
-long validate_number(char *str, int *numbers, int index)
+int	*parse_arguments(int argc, char **argv, int total_numbers)
 {
-    long num;
+	int	*numbers;
+	int	index;
 
-    // Перетворюємо рядок у число
-    num = strtol(str, NULL, 10);
-    if (num > INT_MAX || num < INT_MIN)
-        exit_with_error("number doesn't fit into int");
-    // Перевіряємо дублікат перед додаванням у масив
-    check_duplicate(numbers, index, num);
-    return (num);
-}
-
-void fill_numbers(int argc, char **argv, int *numbers)
-{
-    char **split_args;
-    int i;
-    int index;
-    int j;
-    long num;
-	
+	numbers = malloc(sizeof(int) * (total_numbers));
+	if (!numbers)
+		exit_with_error();
 	index = 0;
-    // Проходимо через всі аргументи
-	i = 1;
-    // if (argc > 2)
-    //     return ;
-    while (i < argc)
-    {
-        split_args = ft_split(argv[i], ' ');
-        if (!split_args)
-            exit_with_error("split failed");
-        j = 0;
-        while (split_args[j])
-        {
-            num = validate_number(split_args[j], numbers, index);
-            numbers[index++] = (int)num;
-            j++;
-        }
-        free_split_args(split_args);
-        i++;
-    }
+	if (argc > 2)
+		fill_from_multiple_args(argc, argv, numbers, &index);
+	else
+		fill_from_single_arg(argv[1], numbers, &index);
+	return (numbers);
 }
 
-int *parse_arguments(int argc, char **argv, int *total_numbers)
+int	count_total_numbers(int argc, char **argv, int total_numbers)
 {
-	int *numbers;
-	
-    // Спочатку рахуємо загальну кількість чисел
-    *total_numbers = count_total_numbers(argc, argv);
-    // Виділяємо пам'ять під числа
-    numbers = malloc(sizeof(int) * (*total_numbers));
-    if (!numbers)
-        exit_with_error("malloc failed");
-    // Заповнюємо масив числами
-    fill_numbers(argc, argv, numbers);
-    return (numbers);
+	char	**split_args;
+	int		i;
+	int		j;
+
+	if (argc == 2)
+	{
+		i = 1;
+		while (i < argc)
+		{
+			split_args = ft_split(argv[i], ' ');
+			if (!split_args)
+				exit_with_error();
+			j = 0;
+			while (split_args[j])
+			{
+				total_numbers++;
+				j++;
+			}
+			free_split_args(split_args);
+			i++;
+		}
+	}
+	else
+		total_numbers = argc - 1;
+	return (total_numbers);
 }

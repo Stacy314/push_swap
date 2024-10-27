@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anastasiia <anastasiia@student.42.fr>      +#+  +:+       +#+        */
+/*   By: apechkov <apechkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:20:29 by apechkov          #+#    #+#             */
-/*   Updated: 2024/10/17 21:47:03 by anastasiia       ###   ########.fr       */
+/*   Updated: 2024/10/27 15:04:33 by apechkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
-
-//extern int	operation_count;  
+# include <stdbool.h>
 
 typedef struct s_node
 {
@@ -35,20 +34,39 @@ typedef struct s_stack
 	int		size;
 }	t_stack;
 
-// main.c
-void	push(t_stack *stack, int value);
-int		pop(t_stack *stack);
-int		is_sorted(t_stack *a);
-void	exit_with_error(char *error_message);
+// main.c 
+void	initialize_stacks(int argc, char **argv, t_stack *a, t_stack *b);
 
 // push_swap.c
-int		is_array_sorted(int *numbers, int total_numbers);
 void	push_numbers_to_stack(t_stack *a, int *numbers, int total_numbers);
-void	free_split_args(char **split_args);
-void	free_stack(t_stack *stack);
+void	bubble_sort(int *arr, int size);
+int		*copy_and_sort(int *numbers, int total_numbers);
+int		ft_find_rank(int *sorted, int num, int total_numbers);
 int		*assign_ranks(int *numbers, int total_numbers);
 
-// operation.c
+// radix.c
+void	sort_three(t_stack *a);
+void	sort_four(t_stack *a, t_stack *b);
+void	sort_five(t_stack *a, t_stack *b);
+void	radix_sort(t_stack *a, t_stack *b);
+
+// parse_arg.c
+int		is_sorted(t_stack *a);
+void	fill_from_multiple_args(int argc, char **argv, int *numbers,
+			int *index);
+void	fill_from_single_arg(char *arg, int *numbers, int *index);
+int		*parse_arguments(int argc, char **argv, int total_numbers);
+int		count_total_numbers(int argc, char **argv, int total_numbers);
+
+// utils
+void	free_split_args(char **split_args);
+void	free_stack(t_stack *stack);
+void	exit_with_error(void);
+bool	check_duplicate(int *numbers, int size, int num);
+int		find_min(t_stack *a);
+int		find_second_min(t_stack *stack);
+int		get_max_bits(t_stack *a);
+// operations
 void	sa(t_stack *a);
 void	sb(t_stack *b);
 void	ss(t_stack *a, t_stack *b);
@@ -60,14 +78,7 @@ void	rr(t_stack *a, t_stack *b);
 void	rra(t_stack *a);
 void	rrb(t_stack *b);
 void	rrr(t_stack *a, t_stack *b);
-
-// radix.c
-void	check_duplicate(int *numbers, int size, long num);
-int		*parse_arguments(int argc, char **argv, int *total_numbers);
-int		get_max_bits(t_stack *a);
-void	sort_three(t_stack *a);
-void	sort_four(t_stack *a, t_stack *b);
-void	sort_five(t_stack *a, t_stack *b);
-void	radix_sort(t_stack *a, t_stack *b);
+void	push(t_stack *stack, int value);
+int		pop(t_stack *stack);
 
 #endif
