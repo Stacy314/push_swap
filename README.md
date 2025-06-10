@@ -131,6 +131,10 @@ make
 
 ✅ You'll see a graphical representation of the stacks and the operations step by step.
 
+## 🙏 Credits
+The visualizer used in this project was not developed by me.
+Special thanks to @o-reo for creating the amazing [push_swap_visualizer](https://github.com/o-reo/push_swap_visualizer), which helped a lot in testing and debugging.
+
 ## ⚠️ Notes
 - Make sure push_swap prints only instructions (no extra text).
 
