@@ -18,27 +18,3 @@ int	ft_toupper(int c)
 		return (c - 32);
 	return (c);
 }
-
-/*int main(int argc, char **argv)
-{
-	int	i;
-	int	e;
-	
-	if (argc == 1)
-	{
-		return (0);
-	}
-	i = 0;
-	e = 1;
-	while (argc-- > 1)
-	{
-		while (argv[e][i] != '\0')
-		{
-			printf("%c\n", ft_tolower(argv[e][i]));
-			i++;
-		}
-		i = 0;
-		e++;
-	}
-	return(0);
-}*/

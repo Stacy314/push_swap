@@ -41,20 +41,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (str);
 }
 
-/*int main(void)
-{
-    char *s = "Hello, World!";
-    char *substr = ft_substr(s, 7, 5); // Starting from index 7, length 5
-
-    if (substr != NULL)
-    {
-        printf("Substring: %s\n", substr);
-        free(substr);
-    }
-    else
-    {
-        printf("Substring is NULL\n");
-    }
-
-    return 0;
-}*/

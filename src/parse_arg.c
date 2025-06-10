@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/push_swap.h"
-#include <stdint.h>
+#include "../inc/push_swap.h"
 
 int	is_sorted(t_stack *a)
 {

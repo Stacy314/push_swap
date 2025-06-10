@@ -70,11 +70,4 @@ void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
-int		ft_printf(const char *format, ...);
-int		print_char(int c);
-int		print_str(char *str);
-int		print_digit(long n, int base, char specifier);
-int		print_format(char specifier, va_list ap);
-int		print_address(unsigned long address);
-
 #endif

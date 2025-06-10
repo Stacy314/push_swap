@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/push_swap.h"
+#include "../inc/push_swap.h"
 
 void	free_split_args(char **split_args)
 {

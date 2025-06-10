@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/push_swap.h"
+#include "../inc/push_swap.h"
 
 void	push_numbers_to_stack(t_stack *a, int *ranks, int total_numbers)
 {

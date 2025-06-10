@@ -66,6 +66,7 @@ bool	check_duplicate(int *numbers, int size, int num);
 int		find_min(t_stack *a);
 int		find_second_min(t_stack *stack);
 int		get_max_bits(t_stack *a);
+
 // operations
 void	sa(t_stack *a);
 void	sb(t_stack *b);

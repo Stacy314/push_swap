@@ -1,4 +1,4 @@
-#include "../includes/push_swap.h"
+#include "../inc/push_swap.h"
 
 void    sa(t_stack *a)
 {

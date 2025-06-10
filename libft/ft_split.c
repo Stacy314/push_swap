@@ -96,27 +96,3 @@ char	**ft_split(char const *s, char c)
 	ptr_words[i] = 0;
 	return (ptr_words);
 }
-
-/*int main()
-{
-    char const *s = "Hello!";
-    char c = 'l';
-    char **result = ft_split(s, c);
-    if (result)
-    {
-        int i = 0;
-        while (result[i])
-        {
-            printf("Word %d: %s\n", i + 1, result[i]);
-            free(result[i]);
-            i++;
-        }
-        free(result);
-    }
-    else
-    {
-        printf("Error: Unable to split the string.\n");
-    }
-
-    return 0;
-}*/
