@@ -1,3 +1,3 @@
-[submodule "push_swap_visualizer"]
-	path = push_swap_visualizer
+[submodule "visualizer"]
+	path = visualizer
 	url = https://github.com/o-reo/push_swap_visualizer.git
