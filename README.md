@@ -95,25 +95,41 @@ git submodule update --init --recursive
 ```
 
 ## ▶️ How to run
-Make sure you have Python 3 installed.
-
-Install the required library:
+ For Debian-based systems, you can install the necessary packages using the following commands:
 
 ```bash
-pip install pygame
+sudo apt-get update
+sudo apt-get install cmake
+sudo apt-get install g++
+sudo apt-get install clang
+sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
+sudo apt-get install libx11-dev libxrandr-dev
+sudo apt-get install libudev-dev
+sudo apt-get install libfreetype-dev
 ```
-Compile your push_swap program:
+
+- Navigate to the `push_swap_visualizer` directory, create `build` directory, and navigate into the build directory:
 
 ```bash
+cd push_swap_visualizer
+mkdir build
+cd build
+```
+
+- Generate the build files using CMake and compile the visualizer:
+
+```bash
+cmake ..
 make
 ```
-Run the visualizer with your arguments:
+
+- Run the visualizer:
 
 ```bash
-ARG="4 67 3 87 23"
-./push_swap $ARG | python3 visualizer/main.py $ARG
+./bin/visualizer
 ```
-## ✅ You'll see a graphical representation of the stacks and the operations step by step.
+
+✅ You'll see a graphical representation of the stacks and the operations step by step.
 
 ## ⚠️ Notes
 - Make sure push_swap prints only instructions (no extra text).
