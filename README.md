@@ -85,6 +85,43 @@ ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker_OS $ARG
 
 - Fully Norm-compliant and leak-free
 
+## 🖼️ Visualizer (Optional)
+This project includes a visualizer to help you see how your push_swap instructions work in real time.
+
+The visualizer is added as a Git submodule in the visualizer/ folder:
+
+```bash
+git submodule update --init --recursive
+```
+
+## ▶️ How to run
+Make sure you have Python 3 installed.
+
+Install the required library:
+
+```bash
+pip install pygame
+```
+Compile your push_swap program:
+
+```bash
+make
+```
+Run the visualizer with your arguments:
+
+```bash
+ARG="4 67 3 87 23"
+./push_swap $ARG | python3 visualizer/main.py $ARG
+```
+## ✅ You'll see a graphical representation of the stacks and the operations step by step.
+
+## ⚠️ Notes
+- Make sure push_swap prints only instructions (no extra text).
+
+- The visualizer reads input from stdin, so pipe your program's output directly into it.
+
+- You can explore the visualizer/ folder for additional options or code tweaks.
+
 ## 🔚 Conclusion
 The push_swap project was a deep dive into data structures, sorting algorithms, and writing optimized, clean C code under real constraints. My radix sort solution offers a great balance between simplicity and performance for mid-sized inputs.
 
